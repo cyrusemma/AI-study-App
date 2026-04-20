@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSM 395 – AI Exam Master</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="noise"></div>
+
+<nav>
+  <div class="nav-brand">CSM 395 · AI</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPanel('home')">Home</button>
+    <button class="nav-tab" onclick="showPanel('notes')">Notes</button>
+    <button class="nav-tab" onclick="showPanel('quiz')">Quiz</button>
+    <button class="nav-tab" onclick="showPanel('chew')">Chew & Pour</button>
+  </div>
+  <div class="progress-bar" id="navProgress">—</div>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<div class="panel active" id="panel-home">
+  <div class="home-hero">
+    <h1>Exam <span>Master</span><br>CSM 395 · AI</h1>
+    <p>Full coverage of all 7 lectures by Dr. Oliver Kornyo. Questions modelled on his tricky exam style. 100+ Q bank for your end-of-sem.</p>
+    <div class="stats-row">
+      <div class="stat-chip"><span>7</span> Lectures</div>
+      <div class="stat-chip"><span>120+</span> Questions</div>
+      <div class="stat-chip"><span>9</span> Topics</div>
+      <div class="stat-chip"><span>3</span> Study Modes</div>
+    </div>
+    <div class="hero-btn-row">
+      <button class="btn btn-primary" onclick="showPanel('quiz')">▶ Start Quiz</button>
+      <button class="btn btn-outline" onclick="showPanel('notes')">📖 Study Notes</button>
+      <button class="btn btn-outline" onclick="showPanel('chew')">🧠 Chew & Pour</button>
+    </div>
+  </div>
+  <div class="section-title">What's covered</div>
+  <div class="topics-grid">
+    <div class="topic-card" data-lec="1" onclick="openTopic(0)">
+      <div class="lec-badge">LECTURE 1</div>
+      <h3>AI Foundations & Intelligence</h3>
+      <p>Definitions, 4 categories, foundations (Phil, Math, Psych), Turing Test, intelligent systems</p>
+    </div>
+    <div class="topic-card" data-lec="2" onclick="openTopic(1)">
+      <div class="lec-badge">LECTURE 2</div>
+      <h3>Agents, PEAS & Robots</h3>
+      <p>Agent types, PEAS framework, environment types, robot DOF, accuracy vs repeatability</p>
+    </div>
+    <div class="topic-card" data-lec="3" onclick="openTopic(2)">
+      <div class="lec-badge">LECTURE 3</div>
+      <h3>Search in AI</h3>
+      <p>BFS, DFS, state space, search strategies, time/space complexity, C&M puzzle</p>
+    </div>
+    <div class="topic-card" data-lec="4" onclick="openTopic(3)">
+      <div class="lec-badge">LECTURE 4</div>
+      <h3>Advanced Search</h3>
+      <p>IDS, Bi-directional, A*, Greedy, heuristic functions, constraint satisfaction</p>
+    </div>
+    <div class="topic-card" data-lec="game" onclick="openTopic(4)">
+      <div class="lec-badge">ADVERSARIAL</div>
+      <h3>Game Playing & Minimax</h3>
+      <p>Zero-sum games, minimax, alpha-beta pruning, SBE, horizon effect</p>
+    </div>
+    <div class="topic-card" data-lec="5" onclick="openTopic(5)">
+      <div class="lec-badge">LECTURE 5</div>
+      <h3>Knowledge & Propositional Logic</h3>
+      <p>KR, Wumpus World, PL syntax/semantics, truth tables, entailment</p>
+    </div>
+    <div class="topic-card" data-lec="6" onclick="openTopic(6)">
+      <div class="lec-badge">LECTURE 6</div>
+      <h3>Predicate Calculus & FOL</h3>
+      <p>Inference rules, horn clauses, forward/backward chaining, quantifiers, FOL</p>
+    </div>
+    <div class="topic-card" data-lec="7" onclick="openTopic(7)">
+      <div class="lec-badge">LECTURE 7</div>
+      <h3>Fuzzy Logic</h3>
+      <p>Fuzzy sets, membership functions, inference, Mamdani vs Sugeno, applications</p>
+    </div>
+    <div class="topic-card" data-lec="ml" onclick="openTopic(8)">
+      <div class="lec-badge">ML BONUS</div>
+      <h3>KNN & Linear Regression</h3>
+      <p>Distance metrics, K selection, gradient descent, MSE, bias-variance tradeoff</p>
+    </div>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="panel" id="panel-notes">
+  <div id="notes-list">
+    <div class="section-title">Study Notes — All Lectures</div>
+    <div class="topics-grid" id="notes-grid"></div>
+  </div>
+  <div id="notes-content" class="hidden">
+    <div class="content-back" onclick="showNotesList()">← Back to topics</div>
+    <div class="content-area" id="content-body"></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="panel" id="panel-quiz">
+  <div id="quiz-setup-view">
+    <div class="quiz-setup">
+      <h2>Exam Simulator</h2>
+      <p>Modelled on Dr. Kornyo's style — definitions, tricky MCQs, scenario-based, fill-the-logic.</p>
+      <div class="mode-cards">
+        <div class="mode-card active" id="mode-all" onclick="selectMode('all',this)">
+          <div class="icon">🎯</div>
+          <h4>Full Exam</h4>
+          <p>All topics, 30 random questions</p>
+        </div>
+        <div class="mode-card" id="mode-topic" onclick="selectMode('topic',this)">
+          <div class="icon">📌</div>
+          <h4>By Topic</h4>
+          <p>Pick one lecture to drill</p>
+        </div>
+        <div class="mode-card" id="mode-tricky" onclick="selectMode('tricky',this)">
+          <div class="icon">🔥</div>
+          <h4>Tricky Only</h4>
+          <p>Questions lecturers love to set</p>
+        </div>
+        <div class="mode-card" id="mode-quick" onclick="selectMode('quick',this)">
+          <div class="icon">⚡</div>
+          <h4>Quick 10</h4>
+          <p>10 random questions, fast fire</p>
+        </div>
+      </div>
+      <div id="topic-select-area" class="hidden topic-select-margin">
+        <div class="topic-filter" id="quiz-topic-filter"></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="startQuiz()">Start Quiz →</button>
+    </div>
+  </div>
+  <div id="quiz-active-view" class="hidden">
+    <div class="quiz-header">
+      <div class="quiz-meta" id="qMeta"></div>
+      <button class="btn btn-outline btn-sm" onclick="endQuiz()">End Quiz</button>
+    </div>
+    <div class="quiz-progress"><div class="quiz-progress-fill" id="qProgress"></div></div>
+    <div id="qContainer"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary hidden" id="btnCheck" onclick="checkAnswer()">Check Answer</button>
+      <button class="btn btn-outline hidden" id="btnNext" onclick="nextQuestion()">Next →</button>
+      <button class="btn btn-primary hidden" id="btnFinish" onclick="showScore()">See Results</button>
+    </div>
+  </div>
+  <div id="quiz-score-view" class="hidden">
+    <div class="score-display">
+      <div class="score-big" id="scoreBig"></div>
+      <div class="score-label" id="scoreLabel"></div>
+      <div id="scoreBreakdown" class="score-breakdown"></div>
+      <div class="btn-row btn-row-center">
+        <button class="btn btn-primary" onclick="startQuiz()">Try Again</button>
+        <button class="btn btn-outline" onclick="resetQuiz()">New Mode</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHEW & POUR -->
+<div class="panel" id="panel-chew">
+  <div class="section-title">Chew & Pour — Active Recall</div>
+  <p class="chew-description">Read the concept on the left (chew), close your eyes or look away, then write what you remember on the right (pour). Hit reveal to check yourself. This is the most powerful memorisation method.</p>
+  <div class="chew-topic-sel" id="chewTopicSel"></div>
+  <div class="chew-container">
+    <div class="chew-pour">
+      <div class="chew-box">
+        <h4>🧠 CHEW — Read & Absorb</h4>
+        <div class="chew-content" id="chewContent"></div>
+      </div>
+      <div class="pour-box">
+        <h4>✍️ POUR — Write It Out</h4>
+        <textarea class="pour-textarea" id="pourInput" placeholder="Don't look left. Write everything you remember about this concept in your own words..."></textarea>
+        <div class="pour-actions">
+          <button class="btn btn-outline btn-sm-flex" onclick="revealPour()">Reveal Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="clearPour()">Clear</button>
+        </div>
+        <div class="pour-reveal" id="pourReveal"></div>
+      </div>
+    </div>
+    <div class="chew-nav">
+      <button class="chew-nav-btn" onclick="prevChew()">← Prev</button>
+      <div class="chew-counter" id="chewCounter"></div>
+      <button class="chew-nav-btn" onclick="nextChew()">Next →</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
